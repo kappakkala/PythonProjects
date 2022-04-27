@@ -82,11 +82,18 @@ class Influxops:
         # select the database
         self.client.switch_database(db)
         # write data from df
-        if influx_keys == None:
-            status = self.client.write_points(df, measurement_write, tags=influx_tags, protocol='line', batch_size=1000)
+        if len(df)!=0:
+            if influx_keys == None:
+                status = self.client.write_points(df, measurement_write, tags=influx_tags, protocol='line', batch_size=1000)
+            else:
+                status = self.client.write_points(df, measurement_write, tags=influx_tags, tag_columns=influx_keys, protocol='line', batch_size=1000)
         else:
-            status = self.client.write_points(df, measurement_write, tags=influx_tags, tag_columns=influx_keys, protocol='line', batch_size=1000)
-        print(status)
+            status = False
+        
+        if status:
+            print(f"Data written succesfully in measurement {measurement_write} in database {db}.")
+        else:
+            print(f"No data is written. Check dataframe.")
 
     def close_connection(self):
         # closes the client connection
@@ -100,3 +107,17 @@ class Influxops:
                 'hobby': ['swimming', 'football', 'fencing', 'swimming']}
         self.df = pd.DataFrame(data=data)
         self.df.index = [parse('2022-01-13 17:00:00')+timedelta(minutes=i) for i in range(len(self.df))]
+
+    def read_data(self, db, measurement_read, query=None):
+        # reads the available data from measurement based on a query
+        if query == None:
+            query = f"select * from {measurement_read}"
+        df = self.client.query(query=query, database=db, data_frame_index='time')
+        if not df =={}:
+            df = pd.concat(df, axis = 1)
+            df.columns = df.columns.droplevel()
+            df.index = pd.to_datetime(df.index, format='%Y%m%d %H:%M:%S').tz_localize(None)
+        else:
+            df = pd.DataFrame()
+            print('No data is available. Check query and measurements')
+        return df
