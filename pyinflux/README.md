@@ -1,5 +1,7 @@
 To restore an influx database from databasename.tar
+
 `tar -xf databasename.tar`
+
 `influxd restore -db databasename -portable databasename/`
 
 
