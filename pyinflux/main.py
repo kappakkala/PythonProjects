@@ -1,12 +1,16 @@
 import pyinfluxops
 
-def main():    
+
+def main():
     # create a class object
     pyflux = pyinfluxops.Influxops()
-    # displays the exisiting databases
-    pyflux.show_databases()
+    # create a new database
+    pyflux.create_database("test")
+    # delete a database
+    pyflux.drop_database("test")
     # close connection
     pyflux.close_connection()
+
 
 if __name__ == "__main__":
     main()
