@@ -1,16 +1,11 @@
-## Query options
+**Query options**
 
-**create database <databasename>**
-creates a new database
+`create database <databasename>` creates a new database
 
-**use <databasename>**
-selects a database
+`use <databasename>` selects a database
 
-**precision rfc3339**
-changes timestamp to datetime format 
+`precision rfc3339` changes timestamp to datetime format 
 
-**show measurements**
-lists all measurements inside a database
+`show measurements` lists all measurements inside a database
 
-**select * from <measurementname>**
-selects all data from the measurement
+`select * from <measurementname> ` selects all data from the measurement
