@@ -30,7 +30,6 @@ class Postgresops:
         try:
             self.conn = pg.connect(
                 host=settings["host"],
-                database=settings["database"],
                 user=settings["username"],
                 password=settings["password"],
             )
@@ -39,6 +38,14 @@ class Postgresops:
             print("Establishing connection to postgres databank.")
         except Exception:
             print("Error connecting to databank.")
+
+    def list_databases(self, display=True):
+        # lists all databases
+        self.cur.execute('SELECT datname FROM pg_database;')
+        # change tuple [('template1',), ('template0',)] to list
+        self.list_db = [i[0] for i in self.cur.fetchall()]
+        if display:
+            print(self.list_db)
 
     def close_connection(self):
         # closes the connection to postgres databank
