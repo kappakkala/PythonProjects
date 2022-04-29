@@ -7,7 +7,7 @@ def main():
     pypg.list_databases()
     # create a new database
     db = 'testdb'
-    pypg.create_database(dbname=db)
+    # pypg.create_database(dbname=db)
     # connect to the database
     pypg.create_connection(dbname=db)
     # create a schema
@@ -16,12 +16,16 @@ def main():
     # create a new table
     tablename = 'cars'
     pypg.create_table(schema=schema, tablename=tablename)
+    # insert a single data
+    # pypg.insert_data_one(schema=schema, tablename=tablename)
+    # insert multiple data
+    pypg.insert_data_many(schema=schema, tablename=tablename)
     # delete an existing table
-    pypg.drop_table(schema=schema, tablename=tablename)
+    # pypg.drop_table(schema=schema, tablename=tablename)
     # delete a schema
-    pypg.drop_schema(schema=schema)
+    # pypg.drop_schema(schema=schema)
     # delete an existing database
-    pypg.drop_database(dbname=db) 
+    # pypg.drop_database(dbname=db) 
     # close database connection
     pypg.close_connection()
 
