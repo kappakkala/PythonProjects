@@ -24,20 +24,32 @@ class Postgresops:
         with open(__location__ + "\settings.yaml") as f:
             self.settings = yaml.safe_load(f)
 
-    def create_connection(self):
+    def create_connection(self, dbname=None, display=True):
         # establish a postgres database connection using a client
         settings = self.settings
         try:
-            self.conn = pg.connect(
-                host=settings["host"],
-                user=settings["username"],
-                password=settings["password"],
-            )
+            if dbname==None:
+                self.conn = pg.connect(
+                    host=settings["host"],
+                    user=settings["username"],
+                    password=settings["password"],
+                )
+            else:
+                self.conn = pg.connect(
+                    host=settings["host"],
+                    user=settings["username"],
+                    password=settings["password"],
+                    database=dbname
+                )
             # suppresses cannot run inside a transaction block error
             self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             # create a cursor
             self.cur = self.conn.cursor()
-            print("Establishing connection to postgres databank.")
+            if display:
+                if dbname==None:
+                    print(f"Establishing connection to postgres databank.")
+                else:
+                    print(f"Establishing connection to postgres databank {dbname}.")
         except Exception:
             print("Error connecting to databank.")
 
@@ -57,8 +69,35 @@ class Postgresops:
             print(f"Database {dbname} created successfully.")
         except Exception as e:
             print(f"No Database {dbname} is created : {e}")
+    
+    def create_schema(self, schema):
+        query = f"CREATE SCHEMA IF NOT EXISTS {schema};"
+        self.cur.execute(query)
+        print(f"Schema {schema} created")
+
+    def drop_schema(self, schema):
+        query = f"DROP SCHEMA IF EXISTS {schema};"
+        self.cur.execute(query)
+        print(f"Schema {schema} deleted")
+
+    def create_table(self, schema, tablename):
+        # delete table if it already exists
+        query = f"DROP TABLE IF EXISTS {schema}.{tablename}"
+        self.cur.execute(query)
+        # create a new table
+        query = f"CREATE TABLE {schema}.{tablename}(id SERIAL PRIMARY KEY, name VARCHAR(255), price INT)"
+        self.cur.execute(query)
+        print(f"Table {tablename} created in schema {schema}")
+
+    def drop_table(self, schema, tablename):
+        # delete table if it already exists
+        query = f"DROP TABLE IF EXISTS {schema}.{tablename}"
+        self.cur.execute(query)
+        print(f"Table {tablename} deleted from schema {schema}")
 
     def drop_database(self, dbname):
+        # disconnect the active database connection 
+        self.create_connection(display=False)
         # deletes an exisiting database 
         query = f"DROP database {dbname};"
         try:
