@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from dateutil.parser import parse
 import psycopg2 as pg
 import pandas as pd
-
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 class Postgresops:
     def __init__(self):
@@ -33,6 +33,8 @@ class Postgresops:
                 user=settings["username"],
                 password=settings["password"],
             )
+            # suppresses cannot run inside a transaction block error
+            self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             # create a cursor
             self.cur = self.conn.cursor()
             print("Establishing connection to postgres databank.")
@@ -46,6 +48,24 @@ class Postgresops:
         self.list_db = [i[0] for i in self.cur.fetchall()]
         if display:
             print(self.list_db)
+
+    def create_database(self, dbname):
+        # creates a new database 
+        query = f"CREATE database {dbname};"
+        try:
+            self.cur.execute(query)
+            print(f"Database {dbname} created successfully.")
+        except Exception as e:
+            print(f"No Database {dbname} is created : {e}")
+
+    def drop_database(self, dbname):
+        # deletes an exisiting database 
+        query = f"DROP database {dbname};"
+        try:
+            self.cur.execute(query)
+            print(f"Database {dbname} deleted successfully.")
+        except Exception as e:
+            print(f"No Database {dbname} is deleted : {e}")
 
     def close_connection(self):
         # closes the connection to postgres databank
