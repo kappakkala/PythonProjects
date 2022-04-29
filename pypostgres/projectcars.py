@@ -1,7 +1,9 @@
 import pypostgresops
 import pandas as pd
+from sqlalchemy import Table, Column, Integer, String, MetaData
 
-class Projectcars(pypostgresops.Postgresops):
+
+class Carpsyco(pypostgresops.Psyco):
     def __init__(self, dbname, schema, tablename):
         # run __init__ of parent class
         super().__init__()
@@ -51,7 +53,9 @@ class Projectcars(pypostgresops.Postgresops):
             (7, "Hummer", 41400),
             (8, "Volkswagen", 21600),
         )
-        query = f"INSERT INTO {schema}.{tablename} (id, name, price) VALUES (%s, %s, %s)"
+        query = (
+            f"INSERT INTO {schema}.{tablename} (id, name, price) VALUES (%s, %s, %s)"
+        )
         self.cur.executemany(query, data)
         print(f"Inserted multiple data to table {schema}.{tablename}")
 
@@ -59,12 +63,41 @@ class Projectcars(pypostgresops.Postgresops):
         # prints the most expensive car from the table
         query = f"SELECT name from {schema}.{tablename} where price = (SELECT MAX(price) from {schema}.{tablename});"
         self.cur.execute(query)
-        car = self.cur.fetchall()  
+        car = self.cur.fetchall()
         # get the string value 'car' from list [('car'),]
         print(car[0][0])
-    
+
     def read_data_into_dataframe(self, schema, tablename):
         # get all the data from the table
         query = f"SELECT * FROM {schema}.{tablename}"
         df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
         print(df)
+
+
+class Caralchemy(pypostgresops.Alchemy):
+    def __init__(self, dbname, schema, tablename):
+        # run __init__ of parent class
+        super().__init__()
+        # prepare a project schema in a specified database
+        self.prepare_schema(dbname=dbname, schema=schema)
+        # create a new table
+        self.create_table(schema_name=schema, tablename=tablename)
+        # delete schema
+        # self.drop_schema(schema_name=schema)
+        # delete an existing database
+        # self.drop_database(dbname=db)
+
+    def create_table(self, schema_name, tablename):
+        meta = MetaData(schema=schema_name)
+        table = Table(
+            f"{tablename}",
+            meta,
+            Column("id", Integer, primary_key=True),
+            Column("name", String(255)),
+            Column("price", Integer),
+        )
+        try:
+            table.create(self.engine)
+            print(f"Table {tablename} created in schema {schema_name}")
+        except Exception as e:
+            print(f"Table {tablename} not created in schema {schema_name} : {e}")
