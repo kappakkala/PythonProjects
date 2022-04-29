@@ -77,19 +77,20 @@ class Postgresops(object):
         self.cur.execute(query)
         print(f"Schema {schema} created")
 
+    def prepare_schema(self, dbname, schema):
+        # prepare a project schema in a specified database
+        # create a new database
+        self.create_database(dbname=dbname)
+        # connect to the database
+        self.create_connection(dbname=dbname)
+        # create a schema
+        self.create_schema(schema=schema)
+
     def drop_schema(self, schema):
+        # drops an existing schema from the database
         query = f"DROP SCHEMA IF EXISTS {schema};"
         self.cur.execute(query)
         print(f"Schema {schema} deleted")
-
-    def create_table(self, schema, tablename):
-        # delete table if it already exists
-        query = f"DROP TABLE IF EXISTS {schema}.{tablename}"
-        self.cur.execute(query)
-        # create a new table
-        query = f"CREATE TABLE {schema}.{tablename}(id SERIAL PRIMARY KEY, name VARCHAR(255), price INT)"
-        self.cur.execute(query)
-        print(f"Table {tablename} created in schema {schema}")
 
     def empty_table(self, schema, tablename):
         # to prevent duplicate insertion using the same id, we delete all data from table

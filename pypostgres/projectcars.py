@@ -1,43 +1,35 @@
 import pypostgresops
 
+
 class Projectcars(pypostgresops.Postgresops):
-    
-    def __init__(self):
+    def __init__(self, dbname, schema, tablename):
         # run __init__ of parent class
         super().__init__()
-        # create a new database
-        db = 'testdb'
-        schema = 'testschema'
-        tablename = 'cars'
-        self.create_database(dbname=db)
-        # connect to the database
-        self.create_connection(dbname=db)
-        # create a schema
-        self.create_schema(schema=schema)
+        # prepare a project schema in a specified database
+        self.prepare_schema(dbname=dbname, schema=schema)
         # create a new table
         self.create_table(schema=schema, tablename=tablename)
-        # insert a single data
-        self.insert_data_one(schema=schema, tablename=tablename)
-        # insert multiple data
-        self.insert_data_many(schema=schema, tablename=tablename)
-        # delete an existing table
-        # self.drop_table(schema=schema, tablename=tablename)
-        # delete a schema
-        # self.drop_schema(schema=schema)
-        # delete an existing database
-        # self.drop_database(dbname=db)
+
+    def create_table(self, schema, tablename):
+        # delete table if it already exists
+        query = f"DROP TABLE IF EXISTS {schema}.{tablename}"
+        self.cur.execute(query)
+        # create a new table
+        query = f"CREATE TABLE {schema}.{tablename}(id SERIAL PRIMARY KEY, name VARCHAR(255), price INT)"
+        self.cur.execute(query)
+        print(f"Table {tablename} created in schema {schema}")
 
     def insert_data_one(self, schema, tablename):
         # empty existing data from table
-        self.empty_table(schema=schema, tablename=tablename) 
+        self.empty_table(schema=schema, tablename=tablename)
         # insert single data
         query = f"INSERT INTO {schema}.{tablename}(name, price) VALUES('Audi', 52642)"
         self.cur.execute(query)
         print(f"Inserted single data to table {schema}.{tablename}")
 
     def insert_data_many(self, schema, tablename):
-         # empty existing data from table
-        self.empty_table(schema=schema, tablename=tablename) 
+        # empty existing data from table
+        self.empty_table(schema=schema, tablename=tablename)
         # insert multiple data
         data = (
             (1, "Audi", 52642),
