@@ -1,5 +1,5 @@
 import pypostgresops
-
+import pandas as pd
 
 class Projectcars(pypostgresops.Postgresops):
     def __init__(self, dbname, schema, tablename):
@@ -9,6 +9,16 @@ class Projectcars(pypostgresops.Postgresops):
         self.prepare_schema(dbname=dbname, schema=schema)
         # create a new table
         self.create_table(schema=schema, tablename=tablename)
+        # insert a single data
+        # self.insert_data_one(schema=schema, tablename=tablename)
+        # insert multiple data
+        self.insert_data_many(schema=schema, tablename=tablename)
+        # delete an existing table
+        # self.drop_table(schema=schema, tablename=tablename)
+        # delete a schema
+        # self.drop_schema(schema=schema)
+        # delete an existing database
+        # self.drop_database(dbname=db)
 
     def create_table(self, schema, tablename):
         # delete table if it already exists
@@ -44,3 +54,17 @@ class Projectcars(pypostgresops.Postgresops):
         query = f"INSERT INTO {schema}.{tablename} (id, name, price) VALUES (%s, %s, %s)"
         self.cur.executemany(query, data)
         print(f"Inserted multiple data to table {schema}.{tablename}")
+
+    def print_most_expensive_car(self, schema, tablename):
+        # prints the most expensive car from the table
+        query = f"SELECT name from {schema}.{tablename} where price = (SELECT MAX(price) from {schema}.{tablename});"
+        self.cur.execute(query)
+        car = self.cur.fetchall()  
+        # get the string value 'car' from list [('car'),]
+        print(car[0][0])
+    
+    def read_data_into_dataframe(self, schema, tablename):
+        # get all the data from the table
+        query = f"SELECT * FROM {schema}.{tablename}"
+        df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
+        print(df)
