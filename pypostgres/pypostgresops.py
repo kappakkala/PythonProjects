@@ -1,7 +1,5 @@
 import os
 import yaml
-from datetime import datetime, timedelta
-from dateutil.parser import parse
 import psycopg2 as pg
 import pandas as pd
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
