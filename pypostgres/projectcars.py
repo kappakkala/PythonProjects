@@ -1,47 +1,50 @@
 import pypostgresops
 import pandas as pd
-from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import Table, Column, Integer, String, MetaData, insert
 
 
 class Carpsyco(pypostgresops.Psyco):
-    def __init__(self, dbname, schema, tablename):
+    def __init__(self, db_name, schema_name, table_name):
         # run __init__ of parent class
         super().__init__()
         # prepare a project schema in a specified database
-        self.prepare_schema(dbname=dbname, schema=schema)
+        self.prepare_schema(db_name=db_name, schema_name=schema_name)
         # create a new table
-        self.create_table(schema=schema, tablename=tablename)
+        self.create_table(schema_name=schema_name, table_name=table_name)
         # insert a single data
-        # self.insert_data_one(schema=schema, tablename=tablename)
+        # self.insert_data_one(schema_name=schema_name, table_name=table_name)
         # insert multiple data
-        self.insert_data_many(schema=schema, tablename=tablename)
+        # self.insert_data_many(schema_name=schema_name, table_name=table_name)
         # delete an existing table
-        # self.drop_table(schema=schema, tablename=tablename)
+        # self.drop_table(schema_name=schema_name, table_name=table_name)
         # delete a schema
-        # self.drop_schema(schema=schema)
+        # self.drop_schema(schema_name=schema_name)
         # delete an existing database
-        # self.drop_database(dbname=db)
+        # self.drop_database(db_name=db_name)
 
-    def create_table(self, schema, tablename):
+    def create_table(self, schema_name, table_name):
         # delete table if it already exists
-        query = f"DROP TABLE IF EXISTS {schema}.{tablename}"
+        query = f"DROP TABLE IF EXISTS {schema_name}.{table_name}"
         self.cur.execute(query)
         # create a new table
-        query = f"CREATE TABLE {schema}.{tablename}(id SERIAL PRIMARY KEY, name VARCHAR(255), price INT)"
-        self.cur.execute(query)
-        print(f"Table {tablename} created in schema {schema}")
+        try:
+            query = f"CREATE TABLE {schema_name}.{table_name}(id SERIAL PRIMARY KEY, name VARCHAR(255), price INT)"
+            self.cur.execute(query)
+            print(f"Table {table_name} created in schema {schema_name}")
+        except:
+            pass
 
-    def insert_data_one(self, schema, tablename):
+    def insert_data_one(self, schema_name, table_name):
         # empty existing data from table
-        self.empty_table(schema=schema, tablename=tablename)
+        self.empty_table(schema_name=schema_name, table_name=table_name)
         # insert single data
-        query = f"INSERT INTO {schema}.{tablename}(name, price) VALUES('Audi', 52642)"
+        query = f"INSERT INTO {schema_name}.{table_name}(name, price) VALUES('Audi', 52642)"
         self.cur.execute(query)
-        print(f"Inserted single data to table {schema}.{tablename}")
+        print(f"Inserted single data to table {schema_name}.{table_name}")
 
-    def insert_data_many(self, schema, tablename):
+    def insert_data_many(self, schema_name, table_name):
         # empty existing data from table
-        self.empty_table(schema=schema, tablename=tablename)
+        self.empty_table(schema_name=schema_name, table_name=table_name)
         # insert multiple data
         data = (
             (1, "Audi", 52642),
@@ -54,50 +57,90 @@ class Carpsyco(pypostgresops.Psyco):
             (8, "Volkswagen", 21600),
         )
         query = (
-            f"INSERT INTO {schema}.{tablename} (id, name, price) VALUES (%s, %s, %s)"
+            f"INSERT INTO {schema_name}.{table_name} (id, name, price) VALUES (%s, %s, %s)"
         )
         self.cur.executemany(query, data)
-        print(f"Inserted multiple data to table {schema}.{tablename}")
+        print(f"Inserted multiple data to table {schema_name}.{table_name}")
 
-    def print_most_expensive_car(self, schema, tablename):
+    def print_most_expensive_car(self, schema_name, table_name):
         # prints the most expensive car from the table
-        query = f"SELECT name from {schema}.{tablename} where price = (SELECT MAX(price) from {schema}.{tablename});"
+        query = f"SELECT name from {schema_name}.{table_name} where price = (SELECT MAX(price) from {schema_name}.{table_name});"
         self.cur.execute(query)
         car = self.cur.fetchall()
         # get the string value 'car' from list [('car'),]
         print(car[0][0])
 
-    def read_data_into_dataframe(self, schema, tablename):
-        # get all the data from the table
-        query = f"SELECT * FROM {schema}.{tablename}"
-        df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
-        print(df)
-
 
 class Caralchemy(pypostgresops.Alchemy):
-    def __init__(self, dbname, schema, tablename):
+    def __init__(self, db_name, schema_name, table_name):
         # run __init__ of parent class
         super().__init__()
         # prepare a project schema in a specified database
-        self.prepare_schema(dbname=dbname, schema=schema)
+        self.prepare_schema(db_name=db_name, schema_name=schema_name)
         # create a new table
-        self.create_table(schema_name=schema, tablename=tablename)
+        self.create_table(schema_name=schema_name, table_name=table_name)
+        # insert a single data
+        # self.insert_data_one(schema_name=schema_name, table_name=table_name)
+        # insert multiple data
+        self.insert_data_many(schema_name=schema_name, table_name=table_name)
         # delete schema
-        # self.drop_schema(schema_name=schema)
-        # delete an existing database
-        # self.drop_database(dbname=db)
+        # self.drop_schema(schema_name=schema_name)
+        # delete an existing database - see issue
+        # self.drop_database(db_name=db_name)
 
-    def create_table(self, schema_name, tablename):
+    def create_table(self, schema_name, table_name):
+        # delete table if it already exists
+        query = f"DROP TABLE IF EXISTS {schema_name}.{table_name}"
+        self.conn.execute(query)
+        # create a new table
         meta = MetaData(schema=schema_name)
         table = Table(
-            f"{tablename}",
+            f"{table_name}",
             meta,
             Column("id", Integer, primary_key=True),
             Column("name", String(255)),
             Column("price", Integer),
         )
-        try:
+        try:  
             table.create(self.engine)
-            print(f"Table {tablename} created in schema {schema_name}")
+            print(f"Table {table_name} created in schema {schema_name}")
         except Exception as e:
-            print(f"Table {tablename} not created in schema {schema_name} : {e}")
+            print(f"Table {table_name} not created in schema {schema_name} : {e}")
+            pass
+
+    def insert_data_one(self, schema_name, table_name):
+        # empty existing data from table
+        self.empty_table(schema_name=schema_name, table_name=table_name)
+        # insert single data
+        query = f"INSERT INTO {schema_name}.{table_name}(name, price) VALUES('Audi', 52642)"
+        # res = self.conn.execute(sqlalchemy.text(query))
+        res = self.conn.execute(query)
+        print(f"Inserted single data to table {schema_name}.{table_name}")
+
+    def insert_data_many(self, schema_name, table_name):
+        # empty existing data from table
+        self.empty_table(schema_name=schema_name, table_name=table_name)
+        # insert multiple data
+        data = (
+            (1, "Audi", 52642),
+            (2, "Mercedes", 57127),
+            (3, "Skoda", 9000),
+            (4, "Volvo", 29000),
+            (5, "Bentley", 350000),
+            (6, "Citroen", 21000),
+            (7, "Hummer", 41400),
+            (8, "Volkswagen", 21600),
+        )
+        query = (
+            f"INSERT INTO {schema_name}.{table_name} (id, name, price) VALUES (%s, %s, %s)"
+        )
+        self.conn.execute(query, data)
+        print(f"Inserted multiple data to table {schema_name}.{table_name}")
+
+    def print_most_expensive_car(self, schema_name, table_name):
+        # prints the most expensive car from the table
+        query = f"SELECT name from {schema_name}.{table_name} where price = (SELECT MAX(price) from {schema_name}.{table_name});"
+        result = self.conn.execute(query)
+        car = result.fetchall()
+        # get the string value 'car' from list [('car'),]
+        print(car[0][0])
