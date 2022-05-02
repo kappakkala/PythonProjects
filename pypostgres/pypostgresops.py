@@ -8,39 +8,27 @@ import base
 
 class Psyco(object):
     def __init__(self):
-        # read db configuration from settings file
-        # commented because we now read the settings from class in base.py
-        # self.read_settings()
         # creates a postgres connection
         self.create_connection()
         # get list of existing databases
         self.list_databases(display=True)
 
-    def read_settings(self):
-        # gets the current active location of the file
-        __location__ = os.path.realpath(
-            os.path.join(os.getcwd(), os.path.dirname(__file__))
-        )
-        # read settings
-        with open(__location__ + "\settings.yaml") as f:
-            self.settings = yaml.safe_load(f)
-
     def create_connection(self, db_name=None, display=True):
         # establish a postgres database connection using a client
-        self.settings = base.Settings().settings
-        settings = self.settings
+        self.pg_settings = base.Settings().settings["postgres"]
+        pg_settings = self.pg_settings
         try:
             if db_name == None:
                 self.conn = pg.connect(
-                    host=settings["host"],
-                    user=settings["username"],
-                    password=settings["password"],
+                    host=pg_settings["host"],
+                    user=pg_settings["username"],
+                    password=pg_settings["password"],
                 )
             else:
                 self.conn = pg.connect(
-                    host=settings["host"],
-                    user=settings["username"],
-                    password=settings["password"],
+                    host=pg_settings["host"],
+                    user=pg_settings["username"],
+                    password=pg_settings["password"],
                     database=db_name,
                 )
             # suppresses cannot run inside a transaction block error
@@ -130,30 +118,19 @@ class Psyco(object):
 
 class Alchemy(object):
     def __init__(self):
-        # read db configuration from settings file
-        # self.read_settings()
         # establish database connection
         self.create_connection()
         # get list of existing databases
         self.list_databases(display=True)
 
-    def read_settings(self):
-        # gets the current active location of the file
-        __location__ = os.path.realpath(
-            os.path.join(os.getcwd(), os.path.dirname(__file__))
-        )
-        # read settings
-        with open(__location__ + "\settings.yaml") as f:
-            self.settings = yaml.safe_load(f)
-
     def create_connection(self, db_name=None, display=True):
         try:
-            self.settings = base.Settings().settings
+            self.pg_settings = base.Settings().settings["postgres"]
             if db_name == None:
-                url = URL.create(**self.settings)
+                url = URL.create(**self.pg_settings)
             else:
-                self.settings["database"] = db_name
-                url = URL.create(**self.settings)
+                self.pg_settings["database"] = db_name
+                url = URL.create(**self.pg_settings)
             # start engine
             self.engine = create_engine(url)
             # connect engine

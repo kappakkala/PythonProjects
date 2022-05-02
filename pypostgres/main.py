@@ -4,9 +4,9 @@ import gc
 
 def main():
     # run projectcars using psycopg2 library
-    pypg = pypsycopg.Carpsyco()
+    # pypg = pypsycopg.Carpsyco()
     # run projectcars using sqlalchemy library
-    # pypg = pysqlalchemy.Caralchemy()
+    pypg = pysqlalchemy.Caralchemy()
     del pypg
     gc.collect()
 
