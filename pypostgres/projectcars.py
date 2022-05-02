@@ -4,9 +4,14 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, insert
 
 
 class Carpsyco(pypostgresops.Psyco):
-    def __init__(self, db_name, schema_name, table_name):
+    def __init__(self):
         # run __init__ of parent class
         super().__init__()
+        
+        db_name = "testdb"
+        schema_name = "testschema"
+        table_name = "cars"
+        
         # prepare a project schema in a specified database
         self.prepare_schema(db_name=db_name, schema_name=schema_name)
         # create a new table
@@ -14,13 +19,20 @@ class Carpsyco(pypostgresops.Psyco):
         # insert a single data
         # self.insert_data_one(schema_name=schema_name, table_name=table_name)
         # insert multiple data
-        # self.insert_data_many(schema_name=schema_name, table_name=table_name)
+        self.insert_data_many(schema_name=schema_name, table_name=table_name)
+        # get the most expensive car from the table
+        self.print_most_expensive_car(schema_name=schema_name, table_name=table_name)
+        # get all data in dataframe
+        df = self.read_data_into_dataframe(schema_name=schema_name, table_name=table_name)
+        print(df)
         # delete an existing table
         # self.drop_table(schema_name=schema_name, table_name=table_name)
         # delete a schema
         # self.drop_schema(schema_name=schema_name)
         # delete an existing database
         # self.drop_database(db_name=db_name)
+        # close database connection
+        self.close_connection()
 
     def create_table(self, schema_name, table_name):
         # delete table if it already exists
@@ -72,9 +84,14 @@ class Carpsyco(pypostgresops.Psyco):
 
 
 class Caralchemy(pypostgresops.Alchemy):
-    def __init__(self, db_name, schema_name, table_name):
+    def __init__(self):
         # run __init__ of parent class
         super().__init__()
+        
+        db_name = "testdb"
+        schema_name = "testschema"
+        table_name = "cars"
+
         # prepare a project schema in a specified database
         self.prepare_schema(db_name=db_name, schema_name=schema_name)
         # create a new table
@@ -83,10 +100,19 @@ class Caralchemy(pypostgresops.Alchemy):
         # self.insert_data_one(schema_name=schema_name, table_name=table_name)
         # insert multiple data
         self.insert_data_many(schema_name=schema_name, table_name=table_name)
-        # delete schema
+        # get the most expensive car from the table
+        self.print_most_expensive_car(schema_name=schema_name, table_name=table_name)
+        # get all data in dataframe
+        df = self.read_data_into_dataframe(schema_name=schema_name, table_name=table_name)
+        print(df)
+        # delete an existing table
+        # self.drop_table(schema_name=schema_name, table_name=table_name)
+        # delete a schema
         # self.drop_schema(schema_name=schema_name)
-        # delete an existing database - see issue
+        # delete an existing database
         # self.drop_database(db_name=db_name)
+        # close database connection
+        self.close_connection()
 
     def create_table(self, schema_name, table_name):
         # delete table if it already exists
