@@ -1,12 +1,14 @@
 from projectcars import pypsycopg, pysqlalchemy
-import json
+from settings import settings
 import gc
 
 def main():
     # run projectcars using psycopg2 library
-    # pypg = pypsycopg.Carpsyco()
+    # pypg = pypsycopg.Carpsyco(settings["postgres"])
     # run projectcars using sqlalchemy library
-    pypg = pysqlalchemy.Caralchemy()
+    pypg = pysqlalchemy.Caralchemy(settings["postgres"])
+
+    # pypg = influxpg.Influxpg(settings["influx"]) 
     del pypg
     gc.collect()
 

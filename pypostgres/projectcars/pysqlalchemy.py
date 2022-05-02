@@ -4,9 +4,9 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, insert
 from projectcars import db_name, schema_name, table_name
 
 class Caralchemy(pypostgresops.Alchemy):
-    def __init__(self):
+    def __init__(self, settings):
         # run __init__ of parent class
-        super().__init__()
+        super().__init__(settings=settings)
         # prepare a project schema in a specified database
         self.prepare_schema(db_name=db_name, schema_name=schema_name)
         # create a new table

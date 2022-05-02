@@ -3,11 +3,11 @@ import pandas as pd
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from sqlalchemy.engine.url import URL
 from sqlalchemy import create_engine, schema
-import base
 
 
 class Psyco(object):
-    def __init__(self):
+    def __init__(self, settings):
+        self.pg_settings = settings
         # creates a postgres connection
         self.create_connection()
         # get list of existing databases
@@ -15,7 +15,6 @@ class Psyco(object):
 
     def create_connection(self, db_name=None, display=True):
         # establish a postgres database connection using a client
-        self.pg_settings = base.Settings().settings["postgres"]
         pg_settings = self.pg_settings
         try:
             if db_name == None:
@@ -117,7 +116,8 @@ class Psyco(object):
 
 
 class Alchemy(object):
-    def __init__(self):
+    def __init__(self, settings):
+        self.pg_settings = settings
         # establish database connection
         self.create_connection()
         # get list of existing databases
@@ -125,7 +125,6 @@ class Alchemy(object):
 
     def create_connection(self, db_name=None, display=True):
         try:
-            self.pg_settings = base.Settings().settings["postgres"]
             if db_name == None:
                 url = URL.create(**self.pg_settings)
             else:
