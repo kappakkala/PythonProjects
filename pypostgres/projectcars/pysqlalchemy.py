@@ -1,7 +1,7 @@
 import pypostgresops
 import pandas as pd
 from sqlalchemy import Table, Column, Integer, String, MetaData, insert
-from Projectcars import db_name, schema_name, table_name
+from projectcars import db_name, schema_name, table_name
 
 class Caralchemy(pypostgresops.Alchemy):
     def __init__(self):

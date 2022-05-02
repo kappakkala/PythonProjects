@@ -1,6 +1,6 @@
 import pypostgresops
 import pandas as pd
-from Projectcars import db_name, schema_name, table_name
+from projectcars import db_name, schema_name, table_name
 
 
 class Carpsyco(pypostgresops.Psyco):
