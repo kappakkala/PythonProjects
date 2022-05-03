@@ -17,7 +17,7 @@ class Psyco(object):
         # establish a postgres database connection using a client
         pg_settings = self.pg_settings
         try:
-            if db_name == None:
+            if db_name is None:
                 self.conn = pg.connect(
                     host=pg_settings["host"],
                     user=pg_settings["username"],
@@ -35,8 +35,8 @@ class Psyco(object):
             # create a cursor
             self.cur = self.conn.cursor()
             if display:
-                if db_name == None:
-                    print(f"Establishing connection to postgres databank.")
+                if db_name is None:
+                    print("Establishing connection to postgres databank.")
                 else:
                     print(f"Establishing connection to postgres databank {db_name}.")
         except Exception:
@@ -125,7 +125,7 @@ class Alchemy(object):
 
     def create_connection(self, db_name=None, display=True):
         try:
-            if db_name == None:
+            if db_name is None:
                 url = URL.create(**self.pg_settings)
             else:
                 self.pg_settings["database"] = db_name
@@ -137,8 +137,8 @@ class Alchemy(object):
             # set isolation/commit
             self.conn.execute("commit")
             if display:
-                if db_name == None:
-                    print(f"Establishing connection to postgres databank.")
+                if db_name is None:
+                    print("Establishing connection to postgres databank.")
                 else:
                     print(f"Establishing connection to postgres databank {db_name}.")
         except Exception as e:
