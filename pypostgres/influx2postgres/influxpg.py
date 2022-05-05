@@ -58,8 +58,16 @@ class Influxpg(pypostgresops.Alchemy):
                 name=table_name,
                 con=self.engine,
                 schema=schema_name,
-                if_exists="replace",
+                if_exists="append",
             )
+            # if_exists{‘fail’, ‘replace’, ‘append’}, default ‘fail’
             print(f"{result} rows affected in table {schema_name}.{table_name}")
         except Exception as e:
             print(f"Error writing dataframe to table : {e}")
+
+    def get_table_info(self, schema_name, table_name):
+        df = self.read_data_into_dataframe(schema_name=schema_name, table_name = table_name)
+        print(f"Total rows : {len(df)}")
+        print(f"Records available per column:")
+        for col in df.columns:
+            print(f"   {col} : {len(df[[col]].dropna())}")

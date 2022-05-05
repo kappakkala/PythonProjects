@@ -110,7 +110,7 @@ class Psyco(object):
 
     def read_data_into_dataframe(self, schema_name, table_name):
         # get all the data from the table
-        query = f"SELECT * FROM {schema_name}.{table_name}"
+        query = f"""SELECT * FROM {schema_name}."{table_name}";"""
         df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
         return df
 
@@ -208,6 +208,10 @@ class Alchemy(object):
 
     def read_data_into_dataframe(self, schema_name, table_name):
         # get all the data from the table
-        query = f"SELECT * FROM {schema_name}.{table_name}"
-        df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
+        query = f"""SELECT * FROM {schema_name}."{table_name}";"""
+        try:
+            df = pd.read_sql_query(query, self.conn, index_col='time', parse_dates=None)
+        # if 'time' column is not present
+        except KeyError:
+            df = pd.read_sql_query(query, self.conn, index_col=None, parse_dates=None)
         return df
