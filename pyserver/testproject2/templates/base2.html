@@ -1,0 +1,20 @@
+<h1>Building and Room Information</h1>
+
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Check Rooms">
+</form>
+
+<p>{{building_info}}</p>
+
+<p>{{room_info}}</p>
+
+<form method="GET">
+    <br>
+    Select Day:
+    <input id="book_date" type="date" name="book_date" value="{{book_date|date:"d/m/Y"}}">
+    <input type="submit" value="Search for available rooms">
+  </form>
+
+  <p>{{available_rooms}}</p>

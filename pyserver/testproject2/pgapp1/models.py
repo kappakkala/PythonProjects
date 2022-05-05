@@ -1,9 +1,11 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Rooms(models.Model):
     buildings = models.CharField(max_length=10)
     rooms = models.CharField(max_length=10)
+    availability = models.DateField(default=timezone.now().date,blank=True)
 
 class Post(models.Model):
     buildings = models.CharField(max_length=10)

@@ -1,0 +1,34 @@
+<html>
+<head>
+    <script>
+        function LoopTest1() {
+            var i=0;
+            var stop = 5;
+            for (i=0;i<5;i++)
+            {  
+                document.write('<p>' + i + '</p>'); // This writes the number in a paragraph
+            }
+        }
+    </script>
+</head>
+<body>
+    <!--
+        Here onclick event is used to recognize the click event,
+        which is fired when the user clicks the button,
+        this calls the LoopTest() function which generates 5 paragraphs with numbers
+    -->
+    <button onclick="LoopTest()">Click to generate content!</button>
+    <script>
+        function LoopTest() {
+            var i=0;
+            var stop = 5;
+            for (i=0;i<5;i++)
+            {  
+                document.write('<p>' + i + '</p>'); // This writes the number in a paragraph
+            }
+        }
+    </script>
+
+</body>
+
+</html>
