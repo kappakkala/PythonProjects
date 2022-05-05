@@ -5,7 +5,17 @@ from django.utils import timezone
 class Rooms(models.Model):
     buildings = models.CharField(max_length=10)
     rooms = models.CharField(max_length=10)
-    availability = models.DateField(default=timezone.now().date,blank=True)
+    availability = models.DateField(default=timezone.now,blank=True)
+
+class Available(models.Model):
+    buildings = models.CharField(max_length=10)
+    rooms = models.CharField(max_length=10)
+    availability = models.DateField(default=timezone.now,blank=True)
+
+class Booked(models.Model):
+    buildings = models.CharField(max_length=10)
+    rooms = models.CharField(max_length=10)
+    availability = models.DateField(default=timezone.now,blank=True)
 
 class Post(models.Model):
     buildings = models.CharField(max_length=10)

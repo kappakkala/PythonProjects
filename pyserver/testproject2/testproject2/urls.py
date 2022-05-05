@@ -23,9 +23,8 @@ from django.views import debug # default view for home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', views.home_view),
-    path('base1/', views.base1_view),
-    path('base2/', views.base2_view),
-    path('base3/', views.base3_view),
-    path('contact/', views.contact_view),
+    path('search/', views.search_view),
+    path('cancel/', views.cancel_view),
+    path('booking/', views.booking_view),
     path('', debug.default_urlconf),
 ]

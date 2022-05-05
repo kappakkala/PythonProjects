@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Rooms, Post
+from .models import Rooms, Post, Available, Booked
 import numpy as np
 from .forms import Postbuilding, ContactUsForm, BuildingForm
 
@@ -56,16 +56,57 @@ def base2_view(request, *args, **kwargs):
     return render(request, "base2.html", {'form': form, 'building_info': name, 'room_info': room_info, 'available_rooms': available_rooms})
 
 
-def base3_view(request, *args, **kwargs):
-    my_context = {}
-    return render(request, "base3.html", my_context)
-
-def contact_view(request):
-    if request.method == 'POST':
-        # create an instance of our form, and fill it with the POST data
-        form = ContactUsForm(request.POST)
-        name = request.POST['name']
+def search_view(request, *args, **kwargs):
+    form = BuildingForm()
+    building = request.GET.get('book_building')
+    book_date = request.GET.get('book_date')
+    queryset = Available.objects.filter(buildings=building, availability=book_date)
+    available_rooms = [entry.rooms for entry in queryset]
+    if len(available_rooms) != 0:
+        info = f"Rooms available on {book_date} in building {building} are {available_rooms}."
     else:
-        # this must be a GET request, so create an empty form
-        form = ContactUsForm()
-    return render(request, "contact.html", {'form': form, 'name': name})  # pass that form to the template
+        if (type(book_date) != type(None)) and (type(building) != type(None)):
+            info = f"No rooms are available on {book_date} in building {building}."
+        else:
+            info = ''
+    return render(request, "search.html", {'form': form, 'available_rooms': available_rooms, 'info_text': info})
+
+def booking_view(request, *args, **kwargs):
+    form = BuildingForm()
+    room = request.GET.get('book_room')
+    book_date = request.GET.get('book_date')
+    queryset = Available.objects.filter(rooms=room, availability=book_date)
+    booked_rooms = [entry.rooms for entry in queryset]
+    building = [entry.buildings for entry in queryset]
+    if len(booked_rooms) != 0:
+        data = Booked(rooms=room, availability=book_date, buildings=building[0])
+        data.save()
+        queryset = Available.objects.filter(rooms=room, availability=book_date).delete()
+        # [1, {'pgapp1.Rooms': 1}]
+        info = f"Room {booked_rooms[0]} is booked on {book_date}."
+    else:
+        if (type(book_date) != type(None)) and (type(room) != type(None)):
+            info = f"No rooms are booked on {book_date}. Check room selection."
+        else:
+            info = ''
+    return render(request, "booking.html", {'form': form, 'booked_rooms': booked_rooms, 'info_text': info})
+
+def cancel_view(request, *args, **kwargs):
+    form = BuildingForm()
+    room = request.GET.get('book_room')
+    book_date = request.GET.get('book_date')
+    queryset = Booked.objects.filter(rooms=room, availability=book_date)
+    canceled_rooms = [entry.rooms for entry in queryset]
+    building = [entry.buildings for entry in queryset]
+    if len(canceled_rooms) != 0:
+        data = Available(rooms=room, availability=book_date, buildings=building[0])
+        data.save()
+        queryset = Booked.objects.filter(rooms=room, availability=book_date).delete()
+        # [1, {'pgapp1.Rooms': 1}]
+        info = f"Room {canceled_rooms[0]} is canceled on {book_date}."
+    else:
+        if (type(book_date) != type(None)) and (type(room) != type(None)):
+            info = f"No rooms are cancelled on {book_date}. Check room selection."
+        else:
+            info = ''
+    return render(request, "cancel.html", {'form': form, 'canceled_rooms': canceled_rooms, 'info_text': info})
