@@ -66,3 +66,21 @@ Create a new `forms.py` inside app folder. Configure `models.py` , `urls.py` to 
 Set up `/home` to display data from postgres table
 
 Set up `/base1` to display a dropdown menu and form field.
+
+Set up `/base2` 
+
+Preview of 127.0.0.1:8000/base2
+
+![alt text](./images/get_base2.png?raw=true "127.0.0.1:8000/base2")
+
+Query selection based on field of type string
+
+![Query selection1 127.0.0.1:8000/base2](./images/post_building_base2.png?raw=true "127.0.0.1:8000/base2")
+
+Query selection based on field of type date
+
+![Query selection2 127.0.0.1:8000/base2](./images/post_date_base2.png?raw=true "127.0.0.1:8000/base2")
+
+Set up `/base3`
+
+Set up `/contact` 
