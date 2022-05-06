@@ -1,0 +1,17 @@
+<h1>Booking and Monitoring System</h1>
+
+<a href="/search"><button>Search Available Rooms</button></a>
+<a href="/cancel"><button>Cancel Booking</button></a>
+<a href="/home"><button>Return Home</button></a>
+
+<form method="GET">
+    <br>    Select Day:
+    <input id="book_date" type="date" name="book_date" value="{{book_date|date:"d/m/Y"}}">
+    
+    <br>    Select Room:
+    <input id="book_room" type="text" name="book_room" value="">
+    <input type="submit" value="Book room">
+
+</form>
+
+<p>{{info_text}}</p>
