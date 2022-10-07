@@ -12,7 +12,8 @@ Download latest firmware from https://micropython.org/download/esp8266/ and move
 Install the pymakr extension in visual studio code. 
 ### 2. Hardware Requirements 
 
-#### Erase flash memory
+#### Option 1 : Command Line Interface
+**a. Erase flash memory**
 
 Before flashing the MicroPython firmware, you need to erase the ESP8266 flash memory. So, with your ESP8266 connected to your computer, hold-down the “BOOT/FLASH” button in your ESP8266 board.
 
@@ -26,7 +27,7 @@ When the “Erasing” process begins, you can release the “BOOT/FLASH” butt
 
 ![Query selection1 flash_button](./images/02_erase_flash.png?raw=true "erase_flash")
 
-#### Flash the firmware
+**b. Flash the firmware**
 
 Hold down the “BOOT/FLASH“ and run 
 
@@ -38,6 +39,26 @@ The terminal displays the following
 
 
 Source: https://randomnerdtutorials.com/flashing-micropython-firmware-esptool-py-esp32-esp8266/
+
+#### Option 2 : Thonny IDE
+
+Alternatively, it is possible to erase and flash the firmware using Thonny IDE. In this case, there is no need for holding down the “BOOT/FLASH“ button.
+
+Go to **Tools** > **Options** and select the **Interpreter** tab. Make sure you’ve selected the right interpreter for your board as well as the COM port.
+
+![Query selection1 thonny_init](./images/13_thonny_init.png?raw=true "thonny_init")
+
+Click on **Install or update MicroPython**.
+
+![Query selection1 thonny_init2](./images/14_thonny_init2.png?raw=true "thonny_init2")
+
+After selecting the correct Port and the downloaded firmware, click on **Install**.
+
+Once installed, click on **Close** followed by **OK**.
+
+![Query selection1 thonny_init3](./images/15_thonny_init3.png?raw=true "thonny_init3")
+
+Source: https://randomnerdtutorials.com/getting-started-thonny-micropython-python-ide-esp32-esp8266/
 
 ## 2. Running a project
 
@@ -67,6 +88,7 @@ Select COM Port and click OK
 
 Go to the newly created project folder and edit main.py
 
+**[Option 1 - Pymakr]**
 ### 3. Connect device
 
 Click on the Pymakr extension and connect the device to the selected com port
@@ -90,3 +112,17 @@ Select the COM port and destination. The status can be seen on the lower right c
 ![Query selection1 uploading](./images/12_uploading.png?raw=true "uploading")
 
 Once uploaded, right click on the *main.py* file, go to pymakr options and select *Run file on device*. See the image *11_upload_code.png*. Select the COM port again and file starts running on the device.
+
+**[Option 2 - Thonny IDE]**
+
+### 3. Project upload
+
+Open *main.py* in Thonny and go to **File** > **Save As**. Select **Micropython device**.
+
+![Query selection1 thonny_upload](./images/16_thonny_upload.png?raw=true "thonny_upload")
+
+Name the file as *main.py* and click **OK**. The *boot.py* file is created by default when you burn MicroPython firmware.
+
+![Query selection1 thonny_upload2](./images/17_thonny_upload2.png?raw=true "thonny_upload2")
+
+Press the on-board **RST/EN** button so that the board restarts and starts running the uploaded code.
