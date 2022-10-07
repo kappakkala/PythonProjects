@@ -3,13 +3,16 @@
 
 ## 1. Prerequisites
 
-### 1. Install esptool
+### 1. Software Requirements
 
-`pip install esptool`
+Install esptool using `pip install esptool`
 
-### 2. Download latest firmware from https://micropython.org/download/esp8266/ and move it to project directory
+Download latest firmware from https://micropython.org/download/esp8266/ and move it to project directory
 
-### 3. Erase flash memory
+Install the pymakr extension in visual studio code. 
+### 2. Hardware Requirements 
+
+#### Erase flash memory
 
 Before flashing the MicroPython firmware, you need to erase the ESP8266 flash memory. So, with your ESP8266 connected to your computer, hold-down the “BOOT/FLASH” button in your ESP8266 board.
 
@@ -23,19 +26,24 @@ When the “Erasing” process begins, you can release the “BOOT/FLASH” butt
 
 ![Query selection1 flash_button](./images/02_erase_flash.png?raw=true "erase_flash")
 
-### 4. Flashing the firmware
+#### Flash the firmware
 
 Hold down the “BOOT/FLASH“ and run 
 
 `python -m esptool --chip esp8266 --port COM8 write_flash --flash_mode dio --flash_size detect 0x0 esp8266-20220618-v1.19.1.bin` 
 
+The terminal displays the following
+
 ![Query selection1 firmware_flashing](./images/03_firmware_flashing.png?raw=true "firmware_flashing")
 
-## 2. Project creation
+
+Source: https://randomnerdtutorials.com/flashing-micropython-firmware-esptool-py-esp32-esp8266/
+
+## 2. Running a project
 
 ### 1. Create a project
 
-After installing the extension pymakr in visual studio code, create a new pymakr project inside the parent directory.
+Create a new pymakr project inside the parent directory.
 
 ![Query selection1 new_project](./images/04_pymakr_new_project.png?raw=true "new_project")
 
@@ -71,7 +79,7 @@ Once the connection is succesfull, the blended icons appears for selection
 
 If not, disconnect the device, reconnect the esp8266 and try connecting again.
 
-References: https://randomnerdtutorials.com/flashing-micropython-firmware-esptool-py-esp32-esp8266/
+### 4. Project upload
 
 Upload the *main.py* file to the device using pymakr.
 
