@@ -1,9 +1,17 @@
-# blinks a single led every 0.5 seconds
+# blinks two led alternately every second
 from machine import Pin
 from time import sleep
 
-led = Pin(2, Pin.OUT)
+LED_BUILTIN1 = 2
+LED_BUILTIN2 = 16
+
+led1 = Pin(LED_BUILTIN1, Pin.OUT)
+led2 = Pin(LED_BUILTIN2, Pin.OUT)
 
 while True:
-  led.value(not led.value())
-  sleep(0.5)
+  led1.on()
+  led2.off()
+  sleep(1)
+  led1.off()
+  led2.on()
+  sleep(1)
