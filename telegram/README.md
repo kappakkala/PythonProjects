@@ -7,7 +7,7 @@ Activate the environment `.\venv\Scripts\activate`
 
 Install requirements `pip install -r requirements.txt --upgrade`
 
-Create a telegram bot and get its api_key and chat_id
+Create a telegram bot and get its api_key and chat_id. See [Tutorial](https://medium.com/@ManHay_Hong/how-to-create-a-telegram-bot-and-send-messages-with-python-4cf314d9fa3e).
 
 Create a **settings.yaml** configuration file 
 ```yaml
