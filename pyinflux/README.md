@@ -1,8 +1,21 @@
-To restore an influx database from databasename.tar
 
-`tar -xf databasename.tar`
+# Python integration with InfluxDB
 
-`influxd restore -db databasename -portable databasename/`
+## InfluxQL
+An SQL like query language used for querying time series data from InfluxDB 0.x and 1.x.
+
+Prerequisites : 
+- Install InfluxDB client on the local machine
+- Setup virtual environment
+- Install requirements.txt
+
+**Cheatsheet**
+
+To restore an influx database from a databasename.tar file
+
+- `tar -xf databasename.tar`
+
+- `influxd restore -db databasename -portable databasename/`
 
 
 **Query options**
