@@ -37,7 +37,7 @@ def get_chatgpt_response(message: str, model="gpt-3.5-turbo"):
 def main():
     cont = True
     while cont:
-        # random prompt to introduce a random person
+        # get prompt from the user
         user_prompt = input("\nEnter the ChatGPT prompt:\n")
         # call function to get response from ChatGPT
         chatbot_response = get_chatgpt_response(user_prompt)
