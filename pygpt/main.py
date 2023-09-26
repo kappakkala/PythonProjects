@@ -1,5 +1,7 @@
 #!/usr/bin/python
-import introduction
+# import predefined_prompt
+import manual_prompt
 
 if __name__ == "__main__":
-    introduction.main()
+    # predefined_prompt.main()
+    manual_prompt.main()

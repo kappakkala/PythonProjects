@@ -14,12 +14,18 @@ Copy api key from OpenAI account. Refer [Tutorial](https://blog.enterprisedna.co
 
 ### 1. Get response from ChatGPT using a predefined prompt
 
-Set up **introduction.py**.
+Set up **predefined_prompt.py**.
 
-Optionally, improve code quality using *flake8* and *black*: `flake8 .\introduction.py` and `black .\introduction.py`.
+Optionally, improve code quality using *flake8* and *black*: `flake8 .\predefined_prompt.py` and `black .\predefined_prompt.py`.
 
-Run **introduction.py**.
+Run **predefined_prompt.py**.
 
 Here's a sample output
-![](./images/output_introduction_py.png?raw=true "output")
+![](./images/output_predefined_prompt_py.png?raw=true "output_predefined_prompt")
 
+### 2. Get response from ChatGPT using a user-driven manual prompt
+
+Set up and run **manual_prompt.py**.
+
+Here's a sample output
+![](./images/output_manual_prompt_py.png?raw=true "output_manual_prompt")
