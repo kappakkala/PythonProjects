@@ -29,3 +29,27 @@ Set up and run **manual_prompt.py**.
 
 Here's a sample output
 ![](./images/output_manual_prompt_py.png?raw=true "output_manual_prompt")
+
+### 3. ChatGPT Telegram bot integration
+
+The idea is to create and establish connection to a ChatGPT based telegram chat bot using Python. The bot queries the chat input from the user and responds with a related ChatGPT result.
+
+#### 3.1 Telegram setup
+
+Create a telegram bot. See the section [How to Create a New Bot for Telegram](https://sendpulse.com/knowledge-base/chatbot/telegram/create-telegram-chatbot).
+
+Refer [Telegrams official API documentation](https://core.telegram.org/api/obtaining_api_id) to get *api id* and *api hash*. 
+
+Append the following to the **.env** file and replace <> with the associated telegram configuration.
+
+```Dotenv
+BOT_API_ID = "<telegram api id>"
+BOT_API_HASH = "<telegram api hash>"
+BOT_NAME = "<telegram bot name>"
+```
+
+#### 3.2 Python setup
+
+Set up and run **telegrambot_prompt.py**. This command prompt will ask for the phone number associated with the bot. Once the phone number is entered, type in the telegram confirmation code to start the session. Approve the session on your phone (via Telegram app).
+
+Now, the user is able to send ChatGPT queries via the bot and receive the associated ChatGPT response immediately.
