@@ -1,0 +1,6 @@
+Called function example_3 with args [] at 2024-02-26 14:00:07.777164 
+Called function get_str with args [hello] at 2024-02-26 14:00:07.779157 
+Called function example_3 with args [] at 2024-02-26 14:06:12.874182 
+Called function get_str with args [hello] at 2024-02-26 14:06:12.880326 
+Called function example_3 with args [] at 2024-02-26 14:09:53.000644 
+Called function get_str with args [hello] at 2024-02-26 14:09:53.009133 

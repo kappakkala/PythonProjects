@@ -1,0 +1,16 @@
+-----------------------------------------
+Example 1
+Performing Task 1
+Performing Task 2
+ 
+-----------------------------------------
+Example 2
+Performing array math on [2. 2. 2. 6. 2. 7. 5. 6. 7. 9.]
+Sum =  48.0
+First Order Difference =  [ 0.  0.  4. -4.  5. -2.  1.  1.  2.]
+Product =  1270080.0
+ 
+-----------------------------------------
+Example 3
+hello world
+ 
