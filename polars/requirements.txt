@@ -1,0 +1,9 @@
+polars
+matplotlib
+numpy
+ipykernel
+hvplot
+pyarrow
+fastexcel
+plotly
+python-dotenv
